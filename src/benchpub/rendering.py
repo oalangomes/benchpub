@@ -287,7 +287,7 @@ def _report_html(
 <style>
 :root {{
   color-scheme: light dark;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,\n    "Segoe UI", sans-serif;
   line-height: 1.5;
 }}
 body {{ margin: 0; background: #0b1020; color: #e8ecf4; }}
@@ -330,14 +330,14 @@ footer {{ margin-top: 48px; color: #8591a6; font-size: 0.9rem; }}
   <section>
     <h2>Experiment</h2>
     <div class="grid">
-      <div class="card kv"><strong>Baseline variant</strong>{_html_escape(_variant(baseline, "baseline"))}</div>
-      <div class="card kv"><strong>Treatment variant</strong>{_html_escape(_variant(treatment, "treatment"))}</div>
+      <div class="card kv">\n        <strong>Baseline variant</strong>{_html_escape(_variant(baseline, "baseline"))}\n      </div>
+      <div class="card kv">\n        <strong>Treatment variant</strong>{_html_escape(_variant(treatment, "treatment"))}\n      </div>
       <div class="card kv"><strong>Baseline dataset</strong>{_html_escape(_dataset(baseline))}</div>
-      <div class="card kv"><strong>Treatment dataset</strong>{_html_escape(_dataset(treatment))}</div>
+      <div class="card kv">\n        <strong>Treatment dataset</strong>{_html_escape(_dataset(treatment))}\n      </div>
       <div class="card kv"><strong>Baseline Git</strong>{_html_escape(_git_commit(baseline))}</div>
-      <div class="card kv"><strong>Treatment Git</strong>{_html_escape(_git_commit(treatment))}</div>
-      <div class="card kv"><strong>Baseline timestamp</strong>{_html_escape(_timestamp(baseline))}</div>
-      <div class="card kv"><strong>Treatment timestamp</strong>{_html_escape(_timestamp(treatment))}</div>
+      <div class="card kv">\n        <strong>Treatment Git</strong>{_html_escape(_git_commit(treatment))}\n      </div>
+      <div class="card kv">\n        <strong>Baseline timestamp</strong>{_html_escape(_timestamp(baseline))}\n      </div>
+      <div class="card kv">\n        <strong>Treatment timestamp</strong>{_html_escape(_timestamp(treatment))}\n      </div>
     </div>
     {hypothesis_html}
   </section>
@@ -372,13 +372,13 @@ footer {{ margin-top: 48px; color: #8591a6; font-size: 0.9rem; }}
         <tbody>
           <tr>
             <td>Baseline</td>
-            <td><a href="{_html_escape(baseline_digest.path)}">{_html_escape(baseline_digest.path)}</a></td>
+            <td>\n              <a href="{_html_escape(baseline_digest.path)}">\n                {_html_escape(baseline_digest.path)}\n              </a>\n            </td>
             <td><code>{_html_escape(baseline_digest.sha256)}</code></td>
             <td>{baseline_digest.size_bytes} bytes</td>
           </tr>
           <tr>
             <td>Treatment</td>
-            <td><a href="{_html_escape(treatment_digest.path)}">{_html_escape(treatment_digest.path)}</a></td>
+            <td>\n              <a href="{_html_escape(treatment_digest.path)}">\n                {_html_escape(treatment_digest.path)}\n              </a>\n            </td>
             <td><code>{_html_escape(treatment_digest.sha256)}</code></td>
             <td>{treatment_digest.size_bytes} bytes</td>
           </tr>
