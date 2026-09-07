@@ -16,3 +16,6 @@ The project follows Semantic Versioning once the first public release is publish
 - `benchpub compare` with three-state comparability.
 - Absolute and relative metric deltas with unit and direction safeguards.
 - Human-readable and machine-readable JSON comparison output.
+- `benchpub render` for deterministic static evidence bundles.
+- Markdown and self-contained HTML reports.
+- Exact validated input preservation with SHA-256 provenance.
