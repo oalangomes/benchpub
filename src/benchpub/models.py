@@ -93,7 +93,7 @@ class BenchmarkResult(BaseModel):
     @field_validator("schema_version", mode="before")
     @classmethod
     def schema_version_must_be_integer(cls, value: object) -> object:
-        if type(value) is not int:
+        if not isinstance(value, int) or isinstance(value, bool):
             raise ValueError("schema_version must be the integer 1")
         return value
 
