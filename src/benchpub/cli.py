@@ -9,7 +9,8 @@ from benchpub import __version__
 app = typer.Typer(
     name="benchpub",
     help="Validate, compare, and render benchmark evidence.",
-    no_args_is_help=True,
+    no_args_is_help=False,
+    invoke_without_command=True,
     add_completion=False,
 )
 
@@ -22,6 +23,7 @@ def _show_version(value: bool) -> None:
 
 @app.callback()
 def main(
+    ctx: typer.Context,
     version: Annotated[
         bool,
         typer.Option(
@@ -33,3 +35,5 @@ def main(
     ] = False,
 ) -> None:
     """Validate, compare, and render benchmark evidence."""
+    if ctx.invoked_subcommand is None:
+        typer.echo(ctx.get_help())
