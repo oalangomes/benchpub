@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.13"
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --dev
+
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(uv run benchpub --version | awk '{print $2}')"
+          test "v$version" = "$GITHUB_REF_NAME"
+
+      - name: Quality gates
+        run: |
+          uv run ruff check .
+          uv run pytest
+
+      - name: Build distributions
+        run: uv build
+
+      - name: Smoke wheel in clean environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          wheel="$(find dist -maxdepth 1 -name '*.whl' -print -quit)"
+          test -n "$wheel"
+          uv venv .release-venv
+          uv pip install --python .release-venv/bin/python "$wheel"
+          .release-venv/bin/benchpub --version
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME"             dist/*             --verify-tag             --title "benchpub $GITHUB_REF_NAME"             --notes-file "docs/releases/$GITHUB_REF_NAME.md"

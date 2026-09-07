@@ -44,6 +44,33 @@ jobs:
         run: |
           uv run benchpub --help
           uv run benchpub --version
+          uv run benchpub validate --help
+          uv run benchpub compare --help
+          uv run benchpub render --help
+
+      - name: Example end-to-end
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          results="$RUNNER_TEMP/benchpub-example-results"
+          report="$RUNNER_TEMP/benchpub-example-report"
+
+          uv run python examples/search-strategies/benchmark.py --output "$results"
+
+          diff -u examples/search-strategies/results/baseline.json "$results/baseline.json"
+          diff -u examples/search-strategies/results/treatment.json "$results/treatment.json"
+
+          uv run benchpub validate "$results/baseline.json" "$results/treatment.json"
+          uv run benchpub compare "$results/baseline.json" "$results/treatment.json" --json             > "$RUNNER_TEMP/benchpub-comparison.json"
+          uv run benchpub render             "$results/baseline.json"             "$results/treatment.json"             --output "$report"
+
+          test -s "$report/index.html"
+          test -s "$report/report.md"
+          test -s "$report/comparison.json"
+          test -s "$report/manifest.json"
+          test -s "$report/evidence/baseline.json"
+          test -s "$report/evidence/treatment.json"
 
       - name: Build package
         run: uv build
