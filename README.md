@@ -40,61 +40,76 @@ It is intentionally not a benchmark runner, experiment-tracking server, database
 
 The project is **pre-release**. The first milestone is `v0.1.0`.
 
-Implemented so far:
+Implemented:
 
-- CLI/package foundation;
 - JSON result contract v1;
-- `benchpub validate`.
+- path-aware validation;
+- baseline/treatment comparison;
+- `compatible / incompatible / indeterminate`;
+- absolute and relative metric deltas;
+- human and JSON comparison output.
 
-Comparison and rendering are intentionally separate follow-up slices.
+Static Markdown/HTML evidence rendering is the next product slice.
 
-## Result manifest
+## Quick example
 
-The smallest valid manifest is:
+A result manifest:
 
 ```json
 {
   "schema_version": 1,
   "experiment": {
-    "id": "lookup-001"
+    "id": "retrieval-001",
+    "variant": "baseline"
   },
   "metrics": [
     {
-      "name": "latency_ms",
-      "value": 12.4
+      "name": "recall_at_20",
+      "value": 0.71,
+      "unit": "ratio",
+      "direction": "higher"
     }
-  ]
+  ],
+  "controlled_variables": {
+    "top_k": 20
+  }
 }
 ```
 
-A richer result can record a hypothesis, dataset revision, controlled variables, configuration, environment, Git provenance, artifacts, and notes.
+Validate and compare:
 
-See [docs/schema.md](docs/schema.md) and the machine-readable [schema/v1.json](schema/v1.json).
+```bash
+benchpub validate baseline.json treatment.json
+benchpub compare baseline.json treatment.json
+benchpub compare baseline.json treatment.json --json
+```
+
+Example comparison:
+
+```text
+Experiment: retrieval-001
+Comparability: COMPATIBLE
+
+Metrics:
+  Metric          Baseline  Treatment  Delta  Change   Outcome
+  --------------  --------  ---------  -----  -------  --------
+  recall [ratio]  0.71      0.83       +0.12  +16.90%  improved
+```
+
+A compatible result means compatible **under declared evidence**, not proof of scientific equivalence.
+
+See [schema semantics](docs/schema.md), [comparison semantics](docs/comparison.md), and the machine-readable [JSON Schema](schema/v1.json).
 
 ## Development
 
 Requires Python 3.11+.
 
-With [uv](https://docs.astral.sh/uv/):
-
 ```bash
 uv sync --dev
-uv run benchpub --help
 uv run pytest
 uv run ruff check .
+uv run benchpub --help
 ```
-
-Validate one or more result manifests:
-
-```bash
-uv run benchpub validate result.json
-uv run benchpub validate baseline.json treatment.json
-```
-
-Validation is CI-friendly:
-
-- exit `0`: every supplied manifest is valid;
-- exit `1`: at least one manifest is invalid or unreadable.
 
 ## Design principles
 
@@ -107,23 +122,19 @@ Validation is CI-friendly:
 - no infrastructure requirement;
 - no abstractions without a concrete need.
 
-## Roadmap
-
-### v0.1.0 — Evidence
+## v0.1.0 roadmap
 
 - [x] JSON result schema;
 - [x] validation;
-- [ ] baseline/treatment comparison;
-- [ ] simple metric deltas;
-- [ ] comparability checks;
+- [x] baseline/treatment comparison;
+- [x] simple metric deltas;
+- [x] comparability checks;
 - [ ] Markdown report;
 - [ ] self-contained HTML report;
 - [ ] provenance and input hashes in the evidence bundle;
 - [ ] reproducible end-to-end example.
 
-### Later
-
-Publication destinations and optional notifications may be added after the core evidence flow is stable. They must remain outside the benchmark domain core.
+Publication destinations and optional notifications remain post-v0.1 concerns until the evidence core is stable.
 
 ## License
 
