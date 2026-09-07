@@ -2,7 +2,7 @@
 
 > **Publish benchmark evidence, not just benchmark numbers.**
 
-`benchpub` is a local-first CLI for turning structured benchmark results into evidence that can be validated, compared, inspected, and published as static reports.
+`benchpub` is a local-first CLI for turning structured benchmark results into evidence that can be validated, compared, inspected, and rendered as static reports.
 
 ## Why
 
@@ -47,58 +47,36 @@ Implemented:
 - baseline/treatment comparison;
 - `compatible / incompatible / indeterminate`;
 - absolute and relative metric deltas;
-- human and JSON comparison output.
+- human and JSON comparison output;
+- deterministic Markdown and self-contained HTML evidence bundles;
+- SHA-256 provenance for the exact validated inputs.
 
-Static Markdown/HTML evidence rendering is the next product slice.
-
-## Quick example
-
-A result manifest:
-
-```json
-{
-  "schema_version": 1,
-  "experiment": {
-    "id": "retrieval-001",
-    "variant": "baseline"
-  },
-  "metrics": [
-    {
-      "name": "recall_at_20",
-      "value": 0.71,
-      "unit": "ratio",
-      "direction": "higher"
-    }
-  ],
-  "controlled_variables": {
-    "top_k": 20
-  }
-}
-```
-
-Validate and compare:
+## Quick start
 
 ```bash
 benchpub validate baseline.json treatment.json
 benchpub compare baseline.json treatment.json
-benchpub compare baseline.json treatment.json --json
+benchpub render baseline.json treatment.json --output ./report
 ```
 
-Example comparison:
+The rendered directory contains:
 
 ```text
-Experiment: retrieval-001
-Comparability: COMPATIBLE
-
-Metrics:
-  Metric          Baseline  Treatment  Delta  Change   Outcome
-  --------------  --------  ---------  -----  -------  --------
-  recall [ratio]  0.71      0.83       +0.12  +16.90%  improved
+report/
+├── index.html
+├── report.md
+├── comparison.json
+├── manifest.json
+└── evidence/
+    ├── baseline.json
+    └── treatment.json
 ```
+
+Open `report/index.html` directly or upload the directory using the static hosting/artifact mechanism you already use.
 
 A compatible result means compatible **under declared evidence**, not proof of scientific equivalence.
 
-See [schema semantics](docs/schema.md), [comparison semantics](docs/comparison.md), and the machine-readable [JSON Schema](schema/v1.json).
+See [schema semantics](docs/schema.md), [comparison semantics](docs/comparison.md), [rendering semantics](docs/rendering.md), and the machine-readable [JSON Schema](schema/v1.json).
 
 ## Development
 
@@ -129,9 +107,9 @@ uv run benchpub --help
 - [x] baseline/treatment comparison;
 - [x] simple metric deltas;
 - [x] comparability checks;
-- [ ] Markdown report;
-- [ ] self-contained HTML report;
-- [ ] provenance and input hashes in the evidence bundle;
+- [x] Markdown report;
+- [x] self-contained HTML report;
+- [x] provenance and input hashes in the evidence bundle;
 - [ ] reproducible end-to-end example.
 
 Publication destinations and optional notifications remain post-v0.1 concerns until the evidence core is stable.

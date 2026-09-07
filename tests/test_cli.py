@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from typer.testing import CliRunner
@@ -82,8 +83,6 @@ def test_compare_human_output_reports_delta(tmp_path: Path) -> None:
 
 
 def test_compare_json_output_is_machine_readable(tmp_path: Path) -> None:
-    import json
-
     baseline = tmp_path / "baseline.json"
     treatment = tmp_path / "treatment.json"
     _write_result(baseline, score=10)
@@ -120,3 +119,40 @@ def test_compare_rejects_invalid_input(tmp_path: Path) -> None:
 
     assert result.exit_code == 1
     assert f"✗ {baseline}" in result.stdout
+
+
+def test_render_creates_static_bundle(tmp_path: Path) -> None:
+    baseline = tmp_path / "baseline.json"
+    treatment = tmp_path / "treatment.json"
+    output = tmp_path / "report"
+    _write_result(baseline, score=10)
+    _write_result(treatment, score=12)
+
+    result = runner.invoke(
+        app,
+        ["render", str(baseline), str(treatment), "--output", str(output)],
+    )
+
+    assert result.exit_code == 0
+    assert f"✓ Evidence bundle: {output}" in result.stdout
+    assert (output / "index.html").is_file()
+    assert (output / "report.md").is_file()
+    assert (output / "manifest.json").is_file()
+
+
+def test_render_rejects_non_empty_output_directory(tmp_path: Path) -> None:
+    baseline = tmp_path / "baseline.json"
+    treatment = tmp_path / "treatment.json"
+    output = tmp_path / "report"
+    output.mkdir()
+    (output / "keep.txt").write_text("keep", encoding="utf-8")
+    _write_result(baseline, score=10)
+    _write_result(treatment, score=12)
+
+    result = runner.invoke(
+        app,
+        ["render", str(baseline), str(treatment), "--output", str(output)],
+    )
+
+    assert result.exit_code == 1
+    assert "output directory is not empty" in result.stdout

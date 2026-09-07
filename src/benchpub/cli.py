@@ -8,6 +8,7 @@ import typer
 
 from benchpub import __version__
 from benchpub.comparison import ComparisonResult, compare_results
+from benchpub.rendering import RenderError, render_bundle
 from benchpub.validation import FileValidation, validate_file
 
 app = typer.Typer(
@@ -89,6 +90,24 @@ def _print_comparison(result: ComparisonResult) -> None:
             typer.echo(f"  - [{warning.code}] {warning.message}")
 
 
+def _validated_pair(
+    baseline: Path,
+    treatment: Path,
+) -> tuple[FileValidation, FileValidation]:
+    baseline_validation = validate_file(baseline)
+    treatment_validation = validate_file(treatment)
+
+    invalid = False
+    for validation in (baseline_validation, treatment_validation):
+        if not validation.is_valid:
+            invalid = True
+            _print_validation_failure(validation)
+    if invalid:
+        raise typer.Exit(code=1)
+
+    return baseline_validation, treatment_validation
+
+
 @app.callback()
 def main(
     ctx: typer.Context,
@@ -144,16 +163,7 @@ def compare(
     ] = False,
 ) -> None:
     """Compare baseline and treatment benchmark results."""
-    baseline_validation = validate_file(baseline)
-    treatment_validation = validate_file(treatment)
-
-    invalid = False
-    for validation in (baseline_validation, treatment_validation):
-        if not validation.is_valid:
-            invalid = True
-            _print_validation_failure(validation)
-    if invalid:
-        raise typer.Exit(code=1)
+    baseline_validation, treatment_validation = _validated_pair(baseline, treatment)
 
     assert baseline_validation.manifest is not None
     assert treatment_validation.manifest is not None
@@ -164,3 +174,44 @@ def compare(
         return
 
     _print_comparison(result)
+
+
+@app.command()
+def render(
+    baseline: Annotated[Path, typer.Argument(help="Baseline result JSON file.")],
+    treatment: Annotated[Path, typer.Argument(help="Treatment result JSON file.")],
+    output: Annotated[
+        Path,
+        typer.Option("--output", "-o", help="Empty or new output directory."),
+    ],
+) -> None:
+    """Render a static benchmark evidence bundle."""
+    baseline_validation, treatment_validation = _validated_pair(baseline, treatment)
+
+    assert baseline_validation.manifest is not None
+    assert treatment_validation.manifest is not None
+    assert baseline_validation.source_bytes is not None
+    assert treatment_validation.source_bytes is not None
+
+    comparison = compare_results(
+        baseline_validation.manifest,
+        treatment_validation.manifest,
+    )
+
+    try:
+        rendered = render_bundle(
+            baseline=baseline_validation.manifest,
+            treatment=treatment_validation.manifest,
+            baseline_bytes=baseline_validation.source_bytes,
+            treatment_bytes=treatment_validation.source_bytes,
+            comparison=comparison,
+            output=output,
+        )
+    except RenderError as exc:
+        typer.echo(f"✗ {exc}")
+        raise typer.Exit(code=1) from exc
+
+    typer.echo(f"✓ Evidence bundle: {rendered.output}")
+    typer.echo(f"  Comparability: {comparison.comparability.value.upper()}")
+    typer.echo(f"  HTML: {rendered.output / 'index.html'}")
+    typer.echo(f"  Markdown: {rendered.output / 'report.md'}")
