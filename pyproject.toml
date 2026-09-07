@@ -30,6 +30,7 @@ classifiers = [
   "Topic :: Software Development :: Testing",
 ]
 dependencies = [
+  "pydantic>=2.10,<3",
   "typer>=0.16,<1",
 ]
 
