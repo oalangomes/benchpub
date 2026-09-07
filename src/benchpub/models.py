@@ -11,6 +11,7 @@ from pydantic import (
     ConfigDict,
     Field,
     JsonValue,
+    StrictBool,
     StrictFloat,
     StringConstraints,
     field_validator,
@@ -56,7 +57,7 @@ class GitProvenance(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     commit: NonEmptyString
-    dirty: bool | None = None
+    dirty: StrictBool | None = None
 
 
 class Provenance(BaseModel):
@@ -64,6 +65,13 @@ class Provenance(BaseModel):
 
     timestamp: datetime | None = None
     git: GitProvenance | None = None
+
+    @field_validator("timestamp", mode="before")
+    @classmethod
+    def timestamp_must_be_iso_string(cls, value: object) -> object:
+        if value is not None and not isinstance(value, str):
+            raise ValueError("timestamp must be an ISO 8601 string")
+        return value
 
 
 class BenchmarkResult(BaseModel):
@@ -81,6 +89,13 @@ class BenchmarkResult(BaseModel):
     provenance: Provenance | None = None
     artifacts: list[NonEmptyString] | None = None
     notes: str | None = None
+
+    @field_validator("schema_version", mode="before")
+    @classmethod
+    def schema_version_must_be_integer(cls, value: object) -> object:
+        if type(value) is not int:
+            raise ValueError("schema_version must be the integer 1")
+        return value
 
     @field_validator("metrics")
     @classmethod

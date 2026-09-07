@@ -56,6 +56,30 @@ def test_unknown_top_level_field_is_rejected() -> None:
         BenchmarkResult.model_validate(manifest)
 
 
+def test_boolean_schema_version_is_rejected() -> None:
+    manifest = minimal_manifest()
+    manifest["schema_version"] = True
+
+    with pytest.raises(ValidationError, match="schema_version must be the integer 1"):
+        BenchmarkResult.model_validate(manifest)
+
+
+def test_string_git_dirty_flag_is_rejected() -> None:
+    manifest = minimal_manifest()
+    manifest["provenance"] = {"git": {"commit": "abc123", "dirty": "false"}}
+
+    with pytest.raises(ValidationError):
+        BenchmarkResult.model_validate(manifest)
+
+
+def test_numeric_timestamp_is_rejected() -> None:
+    manifest = minimal_manifest()
+    manifest["provenance"] = {"timestamp": 0}
+
+    with pytest.raises(ValidationError, match="timestamp must be an ISO 8601 string"):
+        BenchmarkResult.model_validate(manifest)
+
+
 def test_schema_version_other_than_one_is_rejected() -> None:
     manifest = minimal_manifest()
     manifest["schema_version"] = 2

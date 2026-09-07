@@ -8,7 +8,7 @@ Schema v1 describes one result/variant of an experiment. Comparison semantics ar
 
 | Field | Meaning |
 | --- | --- |
-| `schema_version` | Must be the integer `1`. |
+| `schema_version` | Must be the integer `1`. Booleans or strings are not coerced. |
 | `experiment.id` | Stable identifier used to relate results from the same experiment. |
 | `metrics` | Non-empty list of scalar numeric metrics. |
 | `metrics[].name` | Metric identifier. Names must be unique within one manifest. |
@@ -25,9 +25,11 @@ Schema v1 describes one result/variant of an experiment. Comparison semantics ar
 | `controlled_variables` | Values declared as controlled by the experiment author. |
 | `configuration` | Configuration that describes the result/variant. |
 | `environment` | Relevant environment facts supplied by the producer. |
-| `provenance` | Timestamp and basic Git provenance. |
+| `provenance` | ISO 8601 timestamp string and basic Git provenance. |
 | `artifacts` | Opaque artifact references. v0.1 validation does not fetch them. |
 | `notes` | Free-form notes. |
+
+Git `dirty` must be a JSON boolean; strings such as `"false"` are rejected. Provenance timestamps must be ISO 8601 strings rather than Unix numbers.
 
 ## Metric metadata
 
