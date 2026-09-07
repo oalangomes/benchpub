@@ -22,8 +22,6 @@ Benchmark results often end up fragmented across JSON, CSV, logs, screenshots, a
 
 `benchpub` **does not execute benchmarks**.
 
-The intended flow is:
-
 ```text
 benchmark / experiment
         ↓
@@ -40,17 +38,38 @@ It is intentionally not a benchmark runner, experiment-tracking server, database
 
 ## Status
 
-The project is currently **pre-release**. The first milestone is `v0.1.0`.
+The project is **pre-release**. The first milestone is `v0.1.0`.
 
-The initial public CLI will be:
+Implemented so far:
 
-```bash
-benchpub validate result.json
-benchpub compare baseline.json treatment.json
-benchpub render baseline.json treatment.json --output ./report
+- CLI/package foundation;
+- JSON result contract v1;
+- `benchpub validate`.
+
+Comparison and rendering are intentionally separate follow-up slices.
+
+## Result manifest
+
+The smallest valid manifest is:
+
+```json
+{
+  "schema_version": 1,
+  "experiment": {
+    "id": "lookup-001"
+  },
+  "metrics": [
+    {
+      "name": "latency_ms",
+      "value": 12.4
+    }
+  ]
+}
 ```
 
-The current foundation slice only establishes packaging, CLI entry points, tests, linting, and CI. The result schema and comparison semantics land in subsequent slices.
+A richer result can record a hypothesis, dataset revision, controlled variables, configuration, environment, Git provenance, artifacts, and notes.
+
+See [docs/schema.md](docs/schema.md) and the machine-readable [schema/v1.json](schema/v1.json).
 
 ## Development
 
@@ -65,18 +84,23 @@ uv run pytest
 uv run ruff check .
 ```
 
-To install the local checkout as a tool:
+Validate one or more result manifests:
 
 ```bash
-uv tool install .
-benchpub --help
+uv run benchpub validate result.json
+uv run benchpub validate baseline.json treatment.json
 ```
+
+Validation is CI-friendly:
+
+- exit `0`: every supplied manifest is valid;
+- exit `1`: at least one manifest is invalid or unreadable.
 
 ## Design principles
 
 - small explicit contracts;
 - deterministic behavior;
-- useful CLI errors;
+- useful path-aware CLI errors;
 - comparability under declared controls;
 - provenance without pretending to guarantee reproducibility;
 - static-first output;
@@ -87,15 +111,15 @@ benchpub --help
 
 ### v0.1.0 — Evidence
 
-- JSON result schema;
-- validation;
-- baseline/treatment comparison;
-- simple metric deltas;
-- comparability checks;
-- Markdown report;
-- self-contained HTML report;
-- provenance and input hashes;
-- reproducible end-to-end example.
+- [x] JSON result schema;
+- [x] validation;
+- [ ] baseline/treatment comparison;
+- [ ] simple metric deltas;
+- [ ] comparability checks;
+- [ ] Markdown report;
+- [ ] self-contained HTML report;
+- [ ] provenance and input hashes in the evidence bundle;
+- [ ] reproducible end-to-end example.
 
 ### Later
 

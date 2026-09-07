@@ -10,3 +10,6 @@ The project follows Semantic Versioning once the first public release is publish
 
 - Initial repository and CLI foundation.
 - Python packaging, test, lint, and CI setup.
+- Versioned benchmark result contract (schema v1).
+- `benchpub validate` with path-aware errors and CI-friendly exit status.
+- Result schema documentation and committed machine-readable JSON Schema.
