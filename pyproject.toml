@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "benchpub"
-version = "0.1.0.dev0"
+version = "0.1.0"
 description = "Publish benchmark evidence, not just benchmark numbers."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,7 +21,7 @@ keywords = [
   "developer-tools",
 ]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 3 - Alpha",
   "Environment :: Console",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
