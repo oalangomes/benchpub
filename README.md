@@ -4,6 +4,8 @@
 
 `benchpub` is a local-first CLI for turning structured benchmark results into evidence that can be validated, compared, inspected, and rendered as static reports.
 
+> **Status:** pre-release. The repository currently targets `v0.1.0`; no immutable release tag has been published yet.
+
 ## Why
 
 Benchmark results often end up fragmented across JSON, CSV, logs, screenshots, and hand-written tables. That makes it hard to answer basic questions:
@@ -40,14 +42,14 @@ It is intentionally not a benchmark runner, experiment-tracking server, database
 
 Python 3.11+ is required.
 
-With uv:
+Until the first tagged release is published, install the current development version directly from the default branch:
 
 ```bash
-uv tool install git+https://github.com/oalangomes/benchpub.git@v0.1.0
+uv tool install git+https://github.com/oalangomes/benchpub.git
 benchpub --version
 ```
 
-The GitHub release also contains wheel and source-distribution artifacts.
+This is a **pre-release install** intended for evaluation. After `v0.1.0` is published, the README will switch to an immutable versioned install and the GitHub Release will provide wheel and source-distribution artifacts.
 
 ## Quick start
 
@@ -154,7 +156,7 @@ CI additionally proves the public example end-to-end on Python 3.11, 3.12, and 3
 - no infrastructure requirement;
 - no abstractions without a concrete need.
 
-## v0.1.0
+## Target: v0.1.0
 
 - [x] JSON result schema;
 - [x] validation;
