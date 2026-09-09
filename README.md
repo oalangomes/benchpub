@@ -1,14 +1,22 @@
+<p align="center">
+  <img src="docs/assets/benchpub-brand.svg" alt="benchpub — Publish benchmark evidence, not just benchmark numbers." width="100%">
+</p>
+
 # benchpub
 
 > **Publish benchmark evidence, not just benchmark numbers.**
 
-`benchpub` is a local-first CLI for turning structured benchmark results into evidence that can be validated, compared, inspected, and rendered as static reports.
+`benchpub` is a local-first CLI that validates comparability, preserves provenance, and renders structured benchmark results as static evidence bundles.
 
-> **Status:** pre-release. The repository currently targets `v0.1.0`; no immutable release tag has been published yet.
+> **Status:** `v0.1.0` is released and manually validated from both the immutable Git tag and the published wheel.
 
 ## Why
 
-Benchmark results often end up fragmented across JSON, CSV, logs, screenshots, and hand-written tables. That makes it hard to answer basic questions:
+**Benchmarks produce numbers. Engineering decisions need evidence.**
+
+A result alone rarely tells you whether two experiments were actually comparable or which evidence supports a reported delta. Benchmark results also tend to end up fragmented across JSON, logs, screenshots, and hand-written tables.
+
+`benchpub` makes the comparison contract and supporting evidence explicit. It sits after the benchmark runner and helps answer questions such as:
 
 - What hypothesis was being tested?
 - What changed between baseline and treatment?
@@ -42,14 +50,14 @@ It is intentionally not a benchmark runner, experiment-tracking server, database
 
 Python 3.11+ is required.
 
-Until the first tagged release is published, install the current development version directly from the default branch:
+Install the released version from its immutable Git tag:
 
 ```bash
-uv tool install git+https://github.com/oalangomes/benchpub.git
+uv tool install git+https://github.com/oalangomes/benchpub.git@v0.1.0
 benchpub --version
 ```
 
-This is a **pre-release install** intended for evaluation. After `v0.1.0` is published, the README will switch to an immutable versioned install and the GitHub Release will provide wheel and source-distribution artifacts.
+The GitHub Release also provides wheel and source-distribution artifacts.
 
 ## Quick start
 
@@ -80,7 +88,7 @@ Open `report/index.html` directly or upload the directory using the static hosti
 
 A compatible result means compatible **under declared evidence**, not proof of scientific equivalence or reproducibility.
 
-## Reproducible example
+## Deterministic example
 
 The repository includes a deterministic linear-search vs binary-search experiment:
 
@@ -132,6 +140,7 @@ Domain-specific details can live in `controlled_variables`, `configuration`, and
 - [Comparison semantics](docs/comparison.md)
 - [Static evidence bundles](docs/rendering.md)
 - [Release process](docs/releasing.md)
+- [Brand and product positioning](docs/brand.md)
 - [Machine-readable JSON Schema](schema/v1.json)
 
 ## Development
@@ -156,7 +165,7 @@ CI additionally proves the public example end-to-end on Python 3.11, 3.12, and 3
 - no infrastructure requirement;
 - no abstractions without a concrete need.
 
-## Target: v0.1.0
+## v0.1.0
 
 - [x] JSON result schema;
 - [x] validation;
