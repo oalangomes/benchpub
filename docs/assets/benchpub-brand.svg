@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">benchpub</title>
+  <desc id="desc">Publish benchmark evidence, not just benchmark numbers.</desc>
+  <defs>
+    <radialGradient id="bg" cx="58%" cy="46%" r="78%">
+      <stop offset="0" stop-color="#32145A"/>
+      <stop offset="0.5" stop-color="#171027"/>
+      <stop offset="1" stop-color="#0B0714"/>
+    </radialGradient>
+    <linearGradient id="violet" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#C084FC"/>
+      <stop offset="0.55" stop-color="#A855F7"/>
+      <stop offset="1" stop-color="#7C3AED"/>
+    </linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#A855F7" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect width="1280" height="640" fill="url(#grid)"/>
+
+  <g transform="translate(92 115)">
+    <path d="M74 0 148 28 74 56 0 28Z" fill="#C084FC"/>
+    <path d="M74 46 138 70 74 94 10 70Z" fill="#A855F7"/>
+    <path d="M74 84 128 104 74 124 20 104Z" fill="#7C3AED"/>
+  </g>
+
+  <text x="280" y="205" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="112" font-weight="800" fill="#F8F7FC">bench<tspan fill="url(#violet)">pub</tspan></text>
+
+  <text x="640" y="286" text-anchor="middle" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="700" fill="#F8F7FC">Publish benchmark evidence, not just benchmark numbers.</text>
+  <text x="640" y="342" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" letter-spacing="1.2" fill="#C8B7DE">Local-first CLI for traceable benchmark evidence</text>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="700">
+    <g transform="translate(300 405)">
+      <rect width="190" height="72" rx="16" fill="#171027" fill-opacity=".92" stroke="#A855F7" stroke-width="2"/>
+      <circle cx="36" cy="36" r="15" fill="none" stroke="#C084FC" stroke-width="3"/>
+      <path d="m28 36 6 7 11-15" fill="none" stroke="#C084FC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="66" y="45" fill="#F8F7FC">VALIDATE</text>
+    </g>
+    <g transform="translate(545 405)">
+      <rect width="190" height="72" rx="16" fill="#171027" fill-opacity=".92" stroke="#A855F7" stroke-width="2"/>
+      <rect x="22" y="38" width="9" height="14" fill="#C084FC"/>
+      <rect x="35" y="29" width="9" height="23" fill="#A855F7"/>
+      <rect x="48" y="19" width="9" height="33" fill="#7C3AED"/>
+      <text x="70" y="45" fill="#F8F7FC">COMPARE</text>
+    </g>
+    <g transform="translate(790 405)">
+      <rect width="190" height="72" rx="16" fill="#171027" fill-opacity=".92" stroke="#A855F7" stroke-width="2"/>
+      <path d="M24 17h27l12 12v27H24Z" fill="none" stroke="#C084FC" stroke-width="3"/>
+      <path d="M51 17v13h12M31 39h23M31 47h18" fill="none" stroke="#C084FC" stroke-width="2"/>
+      <text x="72" y="45" fill="#F8F7FC">RENDER</text>
+    </g>
+  </g>
+
+  <path d="M492 441h38m-9-8 9 8-9 8M737 441h38m-9-8 9 8-9 8" fill="none" stroke="#A855F7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <line x1="56" y1="545" x2="1224" y2="545" stroke="#A855F7" stroke-opacity=".25"/>
+  <text x="56" y="588" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" letter-spacing="1.2" fill="#A994C4">STATIC EVIDENCE BUNDLES  •  PROVENANCE  •  DECLARED CONTROLS</text>
+  <text x="1224" y="588" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" letter-spacing="1.2" fill="#C084FC">OPEN SOURCE</text>
+</svg>
